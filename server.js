@@ -2,13 +2,18 @@
 const express = require('express');
 // import path module
 const path = require('path');
-const { notes } = require('./db/db.json')
-
+const { notes } = require('./db/db');
 // instantiate the server
 const app = express();
-
 // specifying port number
-const PORT = 3006;
+const PORT = 3007;
+
+//parse incoming string or array data
+app.use(express.urlencoded({ extended: true}));
+//parse incoming JSON data
+app.use(express.json());
+
+
 
 //adding API routes
 app.get('/api/notes', (req, res) => {
@@ -23,14 +28,14 @@ app.post('/api/notes', (req, res) => {
 
 
 //adding HTML routes
-app.get('/public/notes', (req, res) => {
+app.get('/notes', (req, res) => {
     //this needs to return the notes.html file
-    res.sendFile(path.join(__dirname, '/notes.html'));
+    res.sendFile(path.join(__dirname, '/public/assets/notes.html'));
 })
 
 app.get('*', (req, res) => {
     //this needs to return the index.html file
-    res.sendFile(path.join(__dirname, '/index.html'));
+    res.sendFile(path.join(__dirname, '/public/assets/index.html'));
 })
 
 
@@ -41,7 +46,7 @@ app.delete('/api/notes/:id', (req, res) => {
     //to the db.json file
 })
 
-//making server listen to port 3006
+//making server listen to port 3007
 app.listen(PORT, () => {
     console.log(`API server now on ${PORT}`);
 });
