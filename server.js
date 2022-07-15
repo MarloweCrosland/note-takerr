@@ -18,6 +18,7 @@ app.use(express.json());
 //adding API routes
 app.get('/api/notes', (req, res) => {
     //this needs to read the db.json file and return all saved notes as JSON
+    res.json(notes);
 })
 
 app.post('/api/notes', (req, res) => {
@@ -37,6 +38,11 @@ app.get('*', (req, res) => {
     //this needs to return the index.html file
     res.sendFile(path.join(__dirname, '/public/assets/index.html'));
 })
+
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+  }
 
 
 app.delete('/api/notes/:id', (req, res) => {
