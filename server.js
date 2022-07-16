@@ -15,11 +15,25 @@ app.use(express.urlencoded({ extended: true}));
 //parse incoming JSON data
 app.use(express.json());
 
+//------HTML routes-------
+app.get('/notes', (req, res) => {
+    //returns the notes.html file
+    res.sendFile(path.join(__dirname, '/public/assets/notes.html'));
+})
 
+app.get('/', (req, res) => {
+    //returns the index.html file
+    res.sendFile(path.join(__dirname, '/public/assets/index.html'));
+})
 
-//adding API routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/assets/index.html'));
+})
+
+// API routes  & their functions----------
+
 app.get('/api/notes', (req, res) => {
-    //this needs to read the db.json file and return all saved notes as JSON
+    //reads the db.json file and return all saved notes as JSON
     res.json(notes);
 })
 
@@ -51,7 +65,7 @@ app.post('/api/animals', (req, res) => {
     //req.body is where incoming content will be
     //set id based on what the next index of the array will be
     req.body.id = notes.length.toString();
-    // if any data cant be validate, send 400 error
+    // if any data cant be validated, send 400 error
     if (!validateNote(req.body)){
         res.status(400).send('this note is not formatted correctly!');
     } else {
@@ -63,16 +77,6 @@ app.post('/api/animals', (req, res) => {
 })
 
 
-//adding HTML routes
-app.get('/notes', (req, res) => {
-    //this needs to return the notes.html file
-    res.sendFile(path.join(__dirname, '/public/assets/notes.html'));
-})
-
-app.get('/index', (req, res) => {
-    //this needs to return the index.html file
-    res.sendFile(path.join(__dirname, '/public/assets/index.html'));
-})
 
 //filters through all the notes and picks the id that matches, then returns it
 function findById(id, notesArray) {
