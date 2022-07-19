@@ -15,20 +15,6 @@ app.use(express.urlencoded({ extended: true}));
 //parse incoming JSON data
 app.use(express.json());
 
-//------HTML routes-------
-app.get('/notes', (req, res) => {
-    //returns the notes.html file
-    res.sendFile(path.join(__dirname, '/public/assets/notes.html'));
-})
-
-app.get('/', (req, res) => {
-    //returns the index.html file
-    res.sendFile(path.join(__dirname, '/public/assets/index.html'));
-})
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/assets/index.html'));
-})
 
 // API routes  & their functions----------
 
@@ -61,7 +47,7 @@ function validateNote(note) {
   
 }
 
-app.post('/api/animals', (req, res) => {
+app.post('/api/notes', (req, res) => {
     //req.body is where incoming content will be
     //set id based on what the next index of the array will be
     req.body.id = notes.length.toString();
@@ -107,6 +93,23 @@ app.post('/deleteNote/:id', (req, res) => {
     const deleteNotes = note.filter(item => item.id != req.params.id);
     note = deleteNotes;
     return res.redirect('/') ;
+})
+
+//------HTML routes-------
+app.get('/notes', (req, res) => {
+    //returns the notes.html file
+    res.sendFile(path.join(__dirname, '/public/assets/notes.html'));
+})
+
+app.get('/', (req, res) => {
+    //returns the index.html file
+    res.sendFile(path.join(__dirname, '/public/assets/index.html'));
+})
+
+//(wildcard)
+app.get('*', (req, res) => {
+    //returns the index file when nonexistent route is requested
+    res.sendFile(path.join(__dirname, './public/assets/index.html'));
 })
 
 //making server listen to port 3007
